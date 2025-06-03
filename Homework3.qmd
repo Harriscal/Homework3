@@ -7,18 +7,22 @@ editor_options:
 ---
 
 Load require libraries
-```{r packages}
-#use suppressMessages function to disable messages upon loading a package
-suppressMessages(library(tidyverse))
-suppressMessages(library(palmerpenguins))
-```
 
+```{r packages}
+#| label: load-packages
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(palmerpenguins)
+```
 
 ## Task 1
 
 ### Question a
+
 We cannot use the `read_csv()` function specifically to read this data because it expects the data to be comma-separated. The data in `data.txt` is separated by a different delimiter (semicolon). `read_csv()` does not allow specifying a different delimiter, so we must use `read_delim()` instead.
- 
+
 ```{r Q1a}
 #read in the data file
 data <- read_delim("data/data.txt", delim = ";")
@@ -26,12 +30,13 @@ data <- read_delim("data/data.txt", delim = ";")
 #have all variables have type "dbl"
 data <- data |>
   mutate(across(everything(), as.double))
-
+  
 #display the data
 data
 ```
 
 ### Question b
+
 ```{r Q1b}
 #read in the data file
 data2 <- read_delim("data/data2.txt", delim = "6",
@@ -41,11 +46,12 @@ data2 <- read_delim("data/data2.txt", delim = "6",
 data2
 ```
 
-\newpage 
+\newpage
 
 ## Task 2
 
 ### Question a
+
 ```{r Q2a}
 #read in the data file
 trailblazer <- read_csv("data/trailblazer.csv")
@@ -55,7 +61,9 @@ glimpse(trailblazer)
 ```
 
 \newpage
+
 ### Question b
+
 ```{r Q2b}
 # Pivot the data to long format
 trailblazer_longer <- trailblazer |> 
@@ -71,6 +79,7 @@ trailblazer_longer |>
 ```
 
 ### Question c
+
 ```{r Q2c}
 avg_trailblazer <- trailblazer_longer |> 
   pivot_wider(names_from = Location,
@@ -89,13 +98,28 @@ avg_trailblazer
 
 From the tibble above, player **Jusuf Nurkic** scored more on average at home through the first 10 games of the season than away.
 
+\newpage
 
+## Task 3
 
+### Question a
 
+-   \<NULL\>: means that there are no values for that particular cell in the data table—a missing or empty entry—this is common in hierarchical data when certain groups don’t have data for some variables 
 
+-   \<dbl[52]\>: means that the cell contains a list-column with 52 numeric values, indicating repeated or nested data—this is an example of hierarchical data stored in a rectangular format 
 
+-   \<list\>: indicates that the cell contains a list-column that could contain any type of object, including other lists—this is common in tibbles when data is too complex or nested to fit into a single vector 
 
+### Question b
 
+```{r Q3b}
+penguins |> 
+  count(species, island) |> 
+  pivot_wider(names_from = island, values_from = n,
+              values_fill = 0 #from tibble, missing combinations are value 0
+              ) |>
+  group_by(species)
+```
 
 
 
