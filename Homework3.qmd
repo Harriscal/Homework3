@@ -21,7 +21,7 @@ We cannot use the `read_csv()` function specifically to read this data because i
  
 ```{r Q1a}
 #read in the data file
-data <- read_delim("data/data.txt", delim = ";", col_names = TRUE)
+data <- read_delim("data/data.txt", delim = ";")
 
 #have all variables have type "dbl"
 data <- data |>
@@ -34,10 +34,77 @@ data
 ### Question b
 ```{r Q1b}
 #read in the data file
-data2 <- read_delim("data/data2.txt", delim = "6", col_names = TRUE,
+data2 <- read_delim("data/data2.txt", delim = "6",
                     col_types = "fdc") #'f' for fct, 'd' for dbl, 'c' for chr
 
 #display the data
 data2
 ```
+
+\newpage 
+
+## Task 2
+
+### Question a
+```{r Q2a}
+#read in the data file
+trailblazer <- read_csv("data/trailblazer.csv")
+
+#glimpse of the data to confirm it was read in correctly 
+glimpse(trailblazer)
+```
+
+\newpage
+### Question b
+```{r Q2b}
+# Pivot the data to long format
+trailblazer_longer <- trailblazer |> 
+  pivot_longer(cols = -Player, #use all columns except Player
+               names_to = c("Game", "Location"), 
+               names_sep = "_",
+               values_to = "Points"
+               )
+  
+#display the first 5 rows with slice()
+trailblazer_longer |> 
+  slice(1:5)
+```
+
+### Question c
+```{r Q2c}
+avg_trailblazer <- trailblazer_longer |> 
+  pivot_wider(names_from = Location,
+              values_from = Points
+              ) |> #creates the 90 x 4 tibble 
+  group_by(Player) |> #turns into 9 x 4 tibble with each row for the 9 players
+  summarise(mean_home = mean(Home, na.rm = TRUE),
+            mean_away = mean(Away, na.rm = TRUE)
+            ) |>
+  mutate(difference = mean_home - mean_away) |>
+  arrange(desc(difference))
+
+#display the data
+avg_trailblazer
+```
+
+From the tibble above, player **Jusuf Nurkic** scored more on average at home through the first 10 games of the season than away.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
