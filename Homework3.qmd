@@ -1,0 +1,43 @@
+---
+title: "Using Tidyverse"
+format: pdf
+editor: visual
+editor_options: 
+  chunk_output_type: console
+---
+
+Load require libraries
+```{r packages}
+#use suppressMessages function to disable messages upon loading a package
+suppressMessages(library(tidyverse))
+suppressMessages(library(palmerpenguins))
+```
+
+
+## Task 1
+
+### Question a
+We cannot use the `read_csv()` function specifically to read this data because it expects the data to be comma-separated. The data in `data.txt` is separated by a different delimiter (semicolon). `read_csv()` does not allow specifying a different delimiter, so we must use `read_delim()` instead.
+ 
+```{r Q1a}
+#read in the data file
+data <- read_delim("data/data.txt", delim = ";", col_names = TRUE)
+
+#have all variables have type "dbl"
+data <- data |>
+  mutate(across(everything(), as.double))
+
+#display the data
+data
+```
+
+### Question b
+```{r Q1b}
+#read in the data file
+data2 <- read_delim("data/data2.txt", delim = "6", col_names = TRUE,
+                    col_types = "fdc") #'f' for fct, 'd' for dbl, 'c' for chr
+
+#display the data
+data2
+```
+
