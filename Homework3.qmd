@@ -1,5 +1,6 @@
 ---
 title: "Using Tidyverse"
+author: "Calista Harris"
 format: pdf
 editor: visual
 editor_options: 
@@ -65,7 +66,7 @@ glimpse(trailblazer)
 ### Question b
 
 ```{r Q2b}
-# Pivot the data to long format
+#pivot the data to long format
 trailblazer_longer <- trailblazer |> 
   pivot_longer(cols = -Player, #use all columns except Player
                names_to = c("Game", "Location"), 
@@ -104,11 +105,11 @@ From the tibble above, player **Jusuf Nurkic** scored more on average at home th
 
 ### Question a
 
--   \<NULL\>: means that there are no values for that particular cell in the data table—a missing or empty entry—this is common in hierarchical data when certain groups don’t have data for some variables 
+-   \<NULL\>: means that there are no values for that particular cell in the data table where there is a missing or empty entry. This is common in hierarchical data when certain groups don’t have data for some variables 
 
--   \<dbl[52]\>: means that the cell contains a list-column with 52 numeric values, indicating repeated or nested data—this is an example of hierarchical data stored in a rectangular format 
+-   \<dbl[52]\>: means that the cell contains a list-column with 52 numeric values, indicating repeated or nested data. This is an example of hierarchical data stored in a rectangular format 
 
--   \<list\>: indicates that the cell contains a list-column that could contain any type of object, including other lists—this is common in tibbles when data is too complex or nested to fit into a single vector 
+-   \<list\>: indicates that the cell contains a list-column that could contain any type of object. From other lists, this is common in tibbles when data is too complex or nested to fit into a single vector 
 
 ### Question b
 
@@ -121,6 +122,19 @@ penguins |>
   group_by(species)
 ```
 
+\newpage
+
+## Task 4
+```{r Q4}
+complete_bill_length <- penguins |> 
+  mutate(bill_length_mm = if_else(
+      is.na(bill_length_mm) & species == "Adelie", 26,
+      if_else(is.na(bill_length_mm) & species == "Gentoo", 30, bill_length_mm)
+  )) |> 
+  arrange(bill_length_mm) |> 
+  slice(1:10)
+complete_bill_length
+```
 
 
 
