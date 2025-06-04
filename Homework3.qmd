@@ -133,6 +133,8 @@ complete_bill_length <- penguins |>
   )) |> 
   arrange(bill_length_mm) |> 
   slice(1:10)
+
+#display the data
 complete_bill_length
 ```
 
